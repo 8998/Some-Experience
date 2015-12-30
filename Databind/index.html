@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原生JS实现双向数据绑定</title>
+</head>
+<body>
+    <h1>原生JS实现双向数据绑定</h1>
+    <form class="form-bind">
+        <label for="input_some">输入点什么吧</label>
+        <input id="input_some">
+    </form>
+    <p id="output_some">
+    </p>
+    <script>
+        (function(window){
+            // 数据模型
+            var formBind = {
+                name:'表单模型',
+                some:''
+            };
+
+            var input = document.getElementById('input_some');
+            var output = document.getElementById('output_some');
+
+            input.addEventListener('change',function(){
+                formBind.some = this.value;
+            },false);
+
+            // 使用存取器(get/set)实现数据对象和dom元素的双向数据绑定
+            Object.defineProperty(formBind, 'some', {
+                // 每次访问some属性的时候，触发get回调
+                // 每次改变some属性的值，触发set回调
+                get: function(){
+                    return input.value;
+                },
+                set: function(newValue) {
+                    input.value = newValue;
+                    // 如果不需要在页面上反映出model的变化，下面可以去掉
+                    output.innerHTML = newValue
+                },
+                configurable: true
+            });
+        })(window)
+    </script>
+</body>
+</html>
